@@ -1,5 +1,5 @@
-import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 tasks.getByName("bootJar") {
 	enabled = false
@@ -12,6 +12,7 @@ tasks.getByName("jar") {
 plugins {
 	id("org.springframework.boot") version "3.2.4"
 	id("io.spring.dependency-management") version "1.1.4"
+	id("org.jlleitschuh.gradle.ktlint").version("12.1.0")
 	kotlin("jvm") version "1.9.23"
 	kotlin("plugin.spring") version "1.9.23"
 	kotlin("plugin.jpa") version "1.9.23"
@@ -23,6 +24,16 @@ allprojects {
 
 	repositories {
 		mavenCentral()
+	}
+
+	apply {
+		plugin("org.jlleitschuh.gradle.ktlint")
+	}
+
+	ktlint {
+		reporters {
+			reporter(ReporterType.JSON)
+		}
 	}
 }
 
