@@ -1,4 +1,3 @@
 package org.iass
 
-interface ExternalRoot {
-}
+interface ExternalRoot

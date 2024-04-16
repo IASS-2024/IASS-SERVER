@@ -1,11 +1,11 @@
 tasks.getByName("bootJar") {
-    enabled = false
+	enabled = false
 }
 
 tasks.getByName("jar") {
-    enabled = true
+	enabled = true
 }
 
 dependencies {
-    implementation(project(":module-common"))
+	implementation(project(":module-common"))
 }

@@ -8,9 +8,7 @@ import org.springframework.test.context.ContextConfiguration
 @SpringBootTest
 @ContextConfiguration(classes = [IassApplication::class])
 class TestApplicationTests {
-
 	@Test
 	fun contextLoads() {
 	}
-
 }
