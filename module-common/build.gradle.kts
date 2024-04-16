@@ -1,15 +1,15 @@
 tasks.getByName("bootJar") {
-    enabled = false
+	enabled = false
 }
 
 tasks.getByName("jar") {
-    enabled = true
+	enabled = true
 }
 
 dependencies {
-    // Spring AOP
-    implementation("org.springframework.boot:spring-boot-starter-aop")
+	// Spring AOP
+	implementation("org.springframework.boot:spring-boot-starter-aop")
 
-    // Validation
-    implementation("org.springframework.boot:spring-boot-starter-validation")
+	// Validation
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 }

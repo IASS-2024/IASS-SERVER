@@ -1,19 +1,19 @@
 tasks.getByName("bootJar") {
-    enabled = false
+	enabled = false
 }
 
 tasks.getByName("jar") {
-    enabled = true
+	enabled = true
 }
 
 dependencies {
-    implementation(project(":module-common"))
+	implementation(project(":module-common"))
 
-    // DB
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-    runtimeOnly("com.mysql:mysql-connector-j")
+	// DB
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+	runtimeOnly("com.mysql:mysql-connector-j")
 
-    // Validation
-    implementation("org.springframework.boot:spring-boot-starter-validation")
+	// Validation
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 }

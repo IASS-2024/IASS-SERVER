@@ -1,4 +1,3 @@
 package org.iass
 
-interface DomainRoot {
-}
+interface DomainRoot

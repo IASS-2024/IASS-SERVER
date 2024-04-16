@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication(
-	scanBasePackageClasses = [ CommonRoot::class, DomainRoot::class, ExternalRoot::class ]
+	scanBasePackageClasses = [CommonRoot::class, DomainRoot::class, ExternalRoot::class]
 )
 class IassApplication
 

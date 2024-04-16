@@ -1,16 +1,16 @@
 tasks.getByName("bootJar") {
-    enabled = true
+	enabled = true
 }
 
 tasks.getByName("jar") {
-    enabled = false
+	enabled = false
 }
 
 dependencies {
-    implementation(project(":module-common"))
-    implementation(project(":module-domain"))
-    implementation(project(":module-external"))
+	implementation(project(":module-common"))
+	implementation(project(":module-domain"))
+	implementation(project(":module-external"))
 
-    implementation("org.flywaydb:flyway-core")
-    implementation("org.flywaydb:flyway-mysql")
+	implementation("org.flywaydb:flyway-core")
+	implementation("org.flywaydb:flyway-mysql")
 }
