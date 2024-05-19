@@ -49,6 +49,7 @@ subprojects {
 	apply(plugin = "org.jetbrains.kotlin.plugin.noarg")
 	apply(plugin = "org.springframework.boot")
 	apply(plugin = "io.spring.dependency-management")
+	apply(plugin = "java")
 
 	allOpen {
 		annotation("jakarta.persistence.Entity")
@@ -65,8 +66,8 @@ subprojects {
 	}
 
 	dependencies {
-		implementation("org.springframework.boot:spring-boot-starter-actuator")
 		implementation("org.springframework.boot:spring-boot-starter-web")
+		implementation("org.springframework.boot:spring-boot-starter-actuator")
 		implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 		implementation("io.sentry:sentry-spring-boot-starter-jakarta")
 		implementation("org.jetbrains.kotlin:kotlin-reflect")
