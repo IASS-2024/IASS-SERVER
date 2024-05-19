@@ -1,4 +1,4 @@
-package org.iass.model.user
+package org.iass.model.generation
 
 import jakarta.persistence.Id
 import org.springframework.data.mongodb.core.mapping.Document
