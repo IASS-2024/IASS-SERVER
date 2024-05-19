@@ -1,6 +1,7 @@
 package org.iass.model.user
 
 import jakarta.persistence.Id
+import org.iass.model.generation.Generation
 import org.springframework.data.mongodb.core.mapping.Document
 
 @Document("user")
