@@ -39,5 +39,30 @@ data class ApiResponse<T>
 			): ApiResponse<T> {
 				return ApiResponse(errorType.status.value(), errorType.code, errorType.message, data)
 			}
+
+			@JvmStatic
+			fun error(
+				errorType: ErrorType,
+				message: String
+			): ApiResponse<Nothing> {
+				return ApiResponse(errorType.status.value(), errorType.code, message)
+			}
+
+			@JvmStatic
+			fun <T> error(
+				errorType: ErrorType,
+				message: String,
+				data: T
+			): ApiResponse<T> {
+				return ApiResponse(errorType.status.value(), errorType.code, message, data)
+			}
+
+			@JvmStatic
+			fun error(
+				errorType: ErrorType,
+				e: Exception
+			): ApiResponse<Exception> {
+				return ApiResponse(errorType.status.value(), errorType.code, errorType.message, e)
+			}
 		}
 	}
