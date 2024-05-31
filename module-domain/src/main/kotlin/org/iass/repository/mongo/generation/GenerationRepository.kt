@@ -1,4 +1,4 @@
-package org.iass.repository.generation
+package org.iass.repository.mongo.generation
 
 import org.iass.model.generation.Generation
 import org.springframework.data.mongodb.repository.MongoRepository
