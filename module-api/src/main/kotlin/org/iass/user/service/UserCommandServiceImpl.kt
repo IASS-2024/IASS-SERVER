@@ -33,7 +33,7 @@ class UserCommandServiceImpl(
 				).let { userRepository.save(it) }
 		val userAuthentication = UserAuthentication(user.id, null, null)
 		val token = TokenResponse(jwtTokenProvider.generateAccessToken(userAuthentication), jwtTokenProvider.generateRefreshToken(userAuthentication))
-		return LoginResponse(user.id, token)
+		return LoginResponse.of(user.id, token)
 	}
 
 }
