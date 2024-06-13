@@ -12,6 +12,7 @@ enum class SuccessType(val status: HttpStatus, val code: Int, val message: Strin
 	 * 201 CREATED (2100 ~ 2199)
 	 */
 	CREATED(HttpStatus.CREATED, 2100, "자원 생성을 성공하였습니다"),
+	SUCCESS_APPLE_LOGIN(HttpStatus.CREATED, 2101, "애플 로그인을 성공하였습니다"),
 
 	/**
 	 * 204 NO CONTENT (2400 ~ 2499)
