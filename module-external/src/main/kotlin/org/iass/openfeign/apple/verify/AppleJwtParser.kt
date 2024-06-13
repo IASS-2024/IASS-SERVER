@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.*
 import org.iass.dto.response.ErrorType
+import org.iass.exception.BadRequestException
 import org.iass.exception.CommonException
 import org.springframework.stereotype.Component
 import java.security.PublicKey
@@ -14,14 +15,16 @@ class AppleJwtParser(
 ) {
 	fun parseHeaders(identityToken: String): Map<String, String> {
 		try {
-			val encodedHeader = identityToken.split(IDENTITY_TOKEN_VALUE_DELIMITER.toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[HEADER_INDEX]
+			val encodedHeader = identityToken.split(".")[HEADER_INDEX]
 			val decodedHeader = String(java.util.Base64.getUrlDecoder().decode(encodedHeader))
 			val typeRef = object : com.fasterxml.jackson.core.type.TypeReference<Map<String, String>>() {}
 			return OBJECT_MAPPER.readValue(decodedHeader, typeRef)
 		} catch (e: JsonProcessingException) {
-			throw CommonException(ErrorType.INVALID_APPLE_IDENTITY_TOKEN)
+			throw BadRequestException(ErrorType.INVALID_APPLE_IDENTITY_TOKEN)
 		} catch (e: ArrayIndexOutOfBoundsException) {
-			throw CommonException(ErrorType.INVALID_APPLE_IDENTITY_TOKEN)
+			throw BadRequestException(ErrorType.INVALID_APPLE_IDENTITY_TOKEN)
+		} catch (e: IllegalArgumentException) {
+			throw BadRequestException(ErrorType.INVALID_APPLE_IDENTITY_TOKEN)
 		}
 	}
 
@@ -33,13 +36,13 @@ class AppleJwtParser(
 				.parseClaimsJws(idToken)
 				.body
 		} catch (e: ExpiredJwtException) {
-			throw CommonException(ErrorType.EXPIRED_APPLE_IDENTITY_TOKEN)
+			throw BadRequestException(ErrorType.EXPIRED_APPLE_IDENTITY_TOKEN)
 		} catch (e: UnsupportedJwtException) {
-			throw CommonException(ErrorType.INVALID_APPLE_IDENTITY_TOKEN)
+			throw BadRequestException(ErrorType.INVALID_APPLE_IDENTITY_TOKEN)
 		} catch (e: MalformedJwtException) {
-			throw CommonException(ErrorType.INVALID_APPLE_IDENTITY_TOKEN)
+			throw BadRequestException(ErrorType.INVALID_APPLE_IDENTITY_TOKEN)
 		} catch (e: IllegalArgumentException) {
-			throw CommonException(ErrorType.INVALID_APPLE_IDENTITY_TOKEN)
+			throw BadRequestException(ErrorType.INVALID_APPLE_IDENTITY_TOKEN)
 		}
 	}
 

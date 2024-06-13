@@ -1,6 +1,7 @@
 package org.iass.openfeign.apple.verify
 
 import org.iass.dto.response.ErrorType
+import org.iass.exception.BadRequestException
 import org.iass.exception.CommonException
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
@@ -17,7 +18,7 @@ class EncryptUtils {
 			}
 			return hexString.toString()
 		} catch (e: NoSuchAlgorithmException) {
-			throw CommonException(ErrorType.INVALID_ENCRYPT_COMMUNICATION)
+			throw BadRequestException(ErrorType.INVALID_ENCRYPT_COMMUNICATION)
 		}
 	}
 }

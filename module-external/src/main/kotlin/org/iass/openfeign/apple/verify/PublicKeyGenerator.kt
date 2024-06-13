@@ -1,6 +1,7 @@
 package org.iass.openfeign.apple.verify
 
 import org.iass.dto.response.ErrorType
+import org.iass.exception.BadRequestException
 import org.iass.exception.CommonException
 import org.iass.openfeign.dto.ApplePublicKey
 import org.iass.openfeign.dto.ApplePublicKeys
@@ -35,9 +36,9 @@ class PublicKeyGenerator {
 			val keyFactory: KeyFactory = KeyFactory.getInstance(publicKey.kty)
 			return keyFactory.generatePublic(publicKeySpec)
 		} catch (e: NoSuchAlgorithmException) {
-			throw CommonException(ErrorType.CREATE_PUBLIC_KEY_EXCEPTION)
+			throw BadRequestException(ErrorType.CREATE_PUBLIC_KEY_EXCEPTION)
 		} catch (e: InvalidKeySpecException) {
-			throw CommonException(ErrorType.CREATE_PUBLIC_KEY_EXCEPTION)
+			throw BadRequestException(ErrorType.CREATE_PUBLIC_KEY_EXCEPTION)
 		}
 	}
 
