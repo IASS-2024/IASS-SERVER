@@ -7,11 +7,12 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document("user")
 class User(
 	nickname: String,
+	val socialId: String,
 	imgUrl: String,
 	spareTicket: Int,
 	deposit: Int,
 	val socialType: SocialType,
-	val generation: Generation
+	val generation: Generation?
 ) {
 	@Id
 	var id: String? = null
@@ -27,6 +28,16 @@ class User(
 
 	var deposit = deposit
 		private set
+
+	constructor(socialId: String, socialType: SocialType) : this(
+		nickname = "",
+		socialId = socialId,
+		imgUrl = "",
+		spareTicket = 0,
+		deposit = 0,
+		socialType = socialType,
+		generation = null
+	)
 
 	fun useTicket() = --this.spareTicket
 
