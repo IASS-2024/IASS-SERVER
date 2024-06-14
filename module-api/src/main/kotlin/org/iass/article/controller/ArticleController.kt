@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.net.URI
 import java.security.Principal
 
 private const val ARTICLE_URI = "article"
@@ -28,6 +27,6 @@ class ArticleController(
 		@Valid @RequestBody request: ArticleCreateRequest
 	): ResponseEntity<ApiResponse<Nothing>> {
 		articleFacade.create(jwtTokenProvider.getUserIdFromPrincipal(principal), request)
-		return ResponseEntity.ok(ApiResponse.success(SuccessType.SUCCESS_CREATE_ARTICLE))
+		return ResponseEntity.ok(ApiResponse.success(SuccessType.POST_ARTICLE_SUCCESS))
 	}
 }

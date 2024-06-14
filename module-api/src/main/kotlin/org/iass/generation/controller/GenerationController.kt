@@ -25,6 +25,6 @@ class GenerationController(
 		@Valid @RequestBody request: GenerationCreateRequest
 	): ResponseEntity<ApiResponse<Nothing>> {
 		generationFacade.create(jwtTokenProvider.getUserIdFromPrincipal(principal), request)
-		return ResponseEntity.ok(ApiResponse.success(SuccessType.SUCCESS_CREATE_GENERATION))
+		return ResponseEntity.ok(ApiResponse.success(SuccessType.POST_GENERATION_SUCCESS))
 	}
 }
