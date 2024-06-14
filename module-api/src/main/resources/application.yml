@@ -27,8 +27,8 @@ spring:
     activate:
       on-profile: local
 
-  security:
-    debug: true
+  logging:
+      config: classpath:logback-local.xml
 
 jwt:
   secret: ${JWT_SECRET}
