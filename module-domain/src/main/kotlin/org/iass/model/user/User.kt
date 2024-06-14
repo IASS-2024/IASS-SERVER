@@ -9,10 +9,11 @@ class User(
 	nickname: String,
 	val socialId: String,
 	imgUrl: String,
+	description: String,
 	spareTicket: Int,
 	deposit: Int,
 	val socialType: SocialType,
-	val generation: Generation?
+	var generation: Generation?
 ) {
 	@Id
 	var id: String? = null
@@ -21,6 +22,9 @@ class User(
 		private set
 
 	var imgUrl = imgUrl
+		private set
+
+	var description = description
 		private set
 
 	var spareTicket = spareTicket
@@ -33,6 +37,7 @@ class User(
 		nickname = "",
 		socialId = socialId,
 		imgUrl = "",
+		description = "",
 		spareTicket = 0,
 		deposit = 0,
 		socialType = socialType,
@@ -43,5 +48,13 @@ class User(
 
 	fun getPenalty(amount: Int) {
 		this.deposit -= amount
+	}
+
+	fun signIn(nickname: String, description: String, spareTicket: Int, deposit: Int, generation: Generation) {
+		this.nickname = nickname
+		this.description = description
+		this.spareTicket = generation.ticketCount
+		this.deposit = generation.deposit
+		this.generation = generation
 	}
 }

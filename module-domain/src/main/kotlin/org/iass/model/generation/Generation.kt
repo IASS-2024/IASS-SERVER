@@ -9,6 +9,7 @@ class Generation(
 	val order: Int,
 	val startAt: LocalDate,
 	val period: Int,
+	val deposit: Int,
 	val articlePenalty: Int,
 	val feedbackPenalty: Int,
 	val ticketCount: Int,
