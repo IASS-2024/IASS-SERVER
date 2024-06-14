@@ -9,12 +9,11 @@ import java.net.URI
 
 @Service
 @Transactional(readOnly = true)
-class GenerationFacadeImpl(
+class GenerationFacade(
 	private val generationCommandService: GenerationCommandService,
 	private val generationQueryService: GenerationQueryService
-) : GenerationFacade {
-	override fun create(request: GenerationCreateRequest): URI {
-		val generation = generationCommandService.create(request)
-		return URI.create("/api/generation/${generation.id}")
+)  {
+	fun create(userId: String, request: GenerationCreateRequest) {
+		generationCommandService.create(userId, request)
 	}
 }

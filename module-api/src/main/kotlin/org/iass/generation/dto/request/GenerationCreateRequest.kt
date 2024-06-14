@@ -17,6 +17,9 @@ data class GenerationCreateRequest(
 	val period: Int,
 	@field:NotNull
 	@field:Positive
+	val deposit: Int,
+	@field:NotNull
+	@field:Positive
 	val articlePenalty: Int,
 	@field:NotNull
 	@field:Positive
