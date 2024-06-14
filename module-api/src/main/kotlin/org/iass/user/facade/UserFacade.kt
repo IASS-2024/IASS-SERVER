@@ -1,5 +1,7 @@
 package org.iass.user.facade
 
+import org.iass.auth.jwt.TokenResponse
+import org.iass.auth.redis.RefreshToken
 import org.iass.user.dto.LoginRequest
 import org.iass.user.dto.LoginResponse
 import org.iass.user.dto.SignInRequest
@@ -20,5 +22,17 @@ class UserFacade(
 
 	fun signIn(userId: String, request: SignInRequest) {
 		return userCommandService.signIn(userId, request)
+	}
+
+	fun reissue(authorization: String): TokenResponse{
+		return userCommandService.reissue(authorization)
+	}
+
+	fun logout(userId: String) {
+		return userCommandService.logout(userId)
+	}
+
+	fun withdrawal(userId: String) {
+		return userCommandService.withdrawal(userId)
 	}
 }

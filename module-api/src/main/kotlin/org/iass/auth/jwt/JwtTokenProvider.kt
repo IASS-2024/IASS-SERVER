@@ -28,19 +28,19 @@ class JwtTokenProvider (
 		JWT_SECRET = Base64.getEncoder().encodeToString(JWT_SECRET.toByteArray(StandardCharsets.UTF_8))
 	}
 
-	fun reissuedToken(authentication: Authentication): TokenResponse {
+	fun reissuedToken(userId: String): TokenResponse {
 		return TokenResponse.of(
-			generateAccessToken(authentication),
-			generateRefreshToken(authentication))
+			generateAccessToken(userId),
+			generateRefreshToken(userId))
 	}
 
-	fun generateAccessToken(authentication: Authentication): String {
+	fun generateAccessToken(userId: String?): String {
 		val now = Date()
 		val claims = Jwts.claims()
 			.setIssuedAt(now)
 			.setExpiration(Date(now.time + JWTConstants.ACCESS_TOKEN_EXPIRATION_TIME))
 
-		claims[JWTConstants.USER_ID] = authentication.principal
+		claims[JWTConstants.USER_ID] = userId
 		claims[JWTConstants.TOKEN_TYPE] = JWTConstants.ACCESS_TOKEN
 
 		return Jwts.builder()
@@ -50,13 +50,13 @@ class JwtTokenProvider (
 			.compact()
 	}
 
-	fun generateRefreshToken(authentication: Authentication): String {
+	fun generateRefreshToken(userId: String?): String {
 		val now = Date()
 		val claims = Jwts.claims()
 			.setIssuedAt(now)
 			.setExpiration(Date(now.time + JWTConstants.REFRESH_TOKEN_EXPIRATION_TIME))
 
-		claims[JWTConstants.USER_ID] = authentication.principal
+		claims[JWTConstants.USER_ID] = userId
 		claims[JWTConstants.TOKEN_TYPE] = JWTConstants.REFRESH_TOKEN
 
 		val refreshToken = Jwts.builder()
@@ -65,7 +65,7 @@ class JwtTokenProvider (
 			.signWith(signingKey)
 			.compact()
 
-		redisTemplate.opsForValue()[authentication.name.toString(), refreshToken, JWTConstants.REFRESH_TOKEN_EXPIRATION_TIME] = TimeUnit.MILLISECONDS
+		redisTemplate.opsForValue()[userId.toString(), refreshToken, JWTConstants.REFRESH_TOKEN_EXPIRATION_TIME] = TimeUnit.MILLISECONDS
 		return refreshToken
 	}
 
@@ -107,10 +107,10 @@ class JwtTokenProvider (
 		}
 	}
 
-	fun deleteRefreshToken(userId: Long) {
-		if (redisTemplate.hasKey(userId.toString())) {
+	fun deleteRefreshToken(userId: String) {
+		if (redisTemplate.hasKey(userId)) {
 			val valueOperations = redisTemplate.opsForValue()
-			val refreshToken = valueOperations[userId.toString()]
+			val refreshToken = valueOperations[userId]
 			redisTemplate.delete(refreshToken!!)
 		}
 	}

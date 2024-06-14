@@ -1,14 +1,11 @@
 package org.iass.user.service
 
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication
 import org.iass.auth.jwt.JwtTokenProvider
 import org.iass.auth.jwt.TokenResponse
 import org.iass.auth.security.UserAuthentication
-import org.iass.dto.response.ApiResponse
 import org.iass.dto.response.ErrorType
-import org.iass.dto.response.SuccessType
 import org.iass.exception.CommonException
-import org.iass.exception.NotFoundException
-import org.iass.model.generation.Generation
 import org.iass.model.user.SocialType
 import org.iass.model.user.User
 import org.iass.repository.mongo.generation.GenerationRepository
@@ -17,9 +14,6 @@ import org.iass.user.dto.LoginRequest
 import org.iass.user.dto.LoginResponse
 import org.iass.user.dto.SignInRequest
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
-import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -36,13 +30,14 @@ class UserCommandServiceImpl(
 	override fun login(authorization: String, request: LoginRequest) : LoginResponse {
 		val socialId = appleLoginService.getAppleId(authorization)
 		val findUser = userRepository.findUserBySocialId(socialId)
-
-		val user = findUser ?: User(
-					socialId = socialId,
-					socialType = request.socialType,
-				).let { userRepository.save(it) }
-		val userAuthentication = UserAuthentication(user.id, null, null)
-		val token = TokenResponse(jwtTokenProvider.generateAccessToken(userAuthentication), jwtTokenProvider.generateRefreshToken(userAuthentication))
+		val user = findUser?.apply {
+			resetSocialType(request.socialType)
+		} ?: User(
+			socialId = socialId,
+			socialType = request.socialType
+		)
+		userRepository.save(user)
+		val token = TokenResponse(jwtTokenProvider.generateAccessToken(user.id), jwtTokenProvider.generateRefreshToken(user.id))
 		return LoginResponse.of(user.id, token)
 	}
 
@@ -55,6 +50,30 @@ class UserCommandServiceImpl(
 					generation.deposit,
 					generation)
 		userRepository.save(user)
+	}
+
+	override fun reissue(authorization: String): TokenResponse {
+		val token = authorization.substring("Bearer ".length)
+		val userId = jwtTokenProvider.validateRefreshToken(token)
+		jwtTokenProvider.deleteRefreshToken(userId)
+		return jwtTokenProvider.reissuedToken(userId)
+	}
+
+	override fun logout(userId: String) {
+		userRepository.findByIdOrNull(userId) ?: throw CommonException(ErrorType.NOT_FOUND)
+		jwtTokenProvider.deleteRefreshToken(userId)
+	}
+
+	override fun withdrawal(userId: String) {
+		val user = userRepository.findByIdOrNull(userId) ?: throw CommonException(ErrorType.NOT_FOUND)
+		jwtTokenProvider.deleteRefreshToken(userId)
+		if (user.socialType != SocialType.WITHDRAWAL) {
+			user.withdrawal()
+			userRepository.save(user)
+		} else {
+			throw CommonException(ErrorType.BAD_REQUEST)
+		}
+
 	}
 
 }

@@ -2,6 +2,7 @@ package org.iass.user.controller
 
 import jakarta.validation.Valid
 import org.iass.auth.jwt.JwtTokenProvider
+import org.iass.auth.jwt.TokenResponse
 import org.iass.dto.response.ApiResponse
 import org.iass.dto.response.SuccessType
 import org.iass.user.dto.LoginRequest
@@ -9,6 +10,7 @@ import org.iass.user.dto.LoginResponse
 import org.iass.user.dto.SignInRequest
 import org.iass.user.facade.UserFacade
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -27,13 +29,34 @@ class UserController (
 	fun login(
 		@RequestHeader("Authorization") authorization: String,
 		@Valid @RequestBody request: LoginRequest): ResponseEntity<ApiResponse<LoginResponse>> {
-		return ResponseEntity.ok(ApiResponse.success(SuccessType.SUCCESS_APPLE_LOGIN, userFacade.login(authorization, request)))
+		return ResponseEntity.ok(ApiResponse.success(SuccessType.POST_APPLE_LOGIN_SUCCESS, userFacade.login(authorization, request)))
 	}
 
 	@PatchMapping("/signIn")
 	fun signIn(
 		principal: Principal, @RequestBody request: SignInRequest): ResponseEntity<ApiResponse<Nothing>> {
 		userFacade.signIn(jwtTokenProvider.getUserIdFromPrincipal(principal), request)
-		return ResponseEntity.ok(ApiResponse.success(SuccessType.SUCCESS_SIGNIN))
+		return ResponseEntity.ok(ApiResponse.success(SuccessType.PATCH_SIGN_IN_SUCCESS))
+	}
+
+	@PostMapping("/reissue")
+	fun reissue(
+		@RequestHeader("Authorization") authorization: String) : ResponseEntity<ApiResponse<TokenResponse>>  {
+		return ResponseEntity.ok(ApiResponse.success(SuccessType.POST_REISSUE_SUCCESS, userFacade.reissue(authorization)))
+
+	}
+
+	@PostMapping("/logout")
+	fun logout(
+		principal: Principal) : ResponseEntity<ApiResponse<Nothing>> {
+		userFacade.logout(jwtTokenProvider.getUserIdFromPrincipal(principal))
+		return ResponseEntity.ok(ApiResponse.success(SuccessType.POST_LOGOUT_SUCCESS))
+	}
+
+	@DeleteMapping("/withdrawal")
+	fun withdrawal(
+		principal: Principal) : ResponseEntity<ApiResponse<Nothing>> {
+		userFacade.withdrawal(jwtTokenProvider.getUserIdFromPrincipal(principal))
+		return ResponseEntity.ok(ApiResponse.success(SuccessType.SUCCESS_WITHDRAWAL))
 	}
 }

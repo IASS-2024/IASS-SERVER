@@ -12,8 +12,8 @@ class User(
 	description: String,
 	spareTicket: Int,
 	deposit: Int,
-	val socialType: SocialType,
-	var generation: Generation?
+	socialType: SocialType,
+	generation: Generation?
 ) {
 	@Id
 	var id: String? = null
@@ -31,6 +31,12 @@ class User(
 		private set
 
 	var deposit = deposit
+		private set
+
+	var socialType = socialType
+		private set
+
+	var generation = generation
 		private set
 
 	constructor(socialId: String, socialType: SocialType) : this(
@@ -56,5 +62,13 @@ class User(
 		this.spareTicket = generation.ticketCount
 		this.deposit = generation.deposit
 		this.generation = generation
+	}
+
+	fun withdrawal() {
+		this.socialType = SocialType.WITHDRAWAL
+	}
+
+	fun resetSocialType(socialType: SocialType) {
+		this.socialType = socialType
 	}
 }
