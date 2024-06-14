@@ -75,7 +75,7 @@ class JwtTokenProvider (
 			return Keys.hmacShaKeyFor(encodedKey.toByteArray())
 		}
 
-	fun validateRefreshToken(refreshToken: String?): Long {
+	fun validateRefreshToken(refreshToken: String?): String {
 		validateToken(refreshToken)
 		val userId = getUserFromJwt(refreshToken)
 		if (redisTemplate.hasKey(userId.toString())) {
@@ -123,16 +123,16 @@ class JwtTokenProvider (
 			.body
 	}
 
-	fun getUserFromJwt(token: String?): Long {
+	fun getUserFromJwt(token: String?): String {
 		val claims = getBody(token)
-		return claims[JWTConstants.USER_ID].toString().toLong()
+		return claims[JWTConstants.USER_ID].toString()
 	}
 
-	fun getUserIdFromPrincipal(principal: Principal): Long {
+	fun getUserIdFromPrincipal(principal: Principal): String {
 		if (Objects.isNull(principal)) {
 			throw UnauthorizedException(ErrorType.INVALID_AUTH);
 		}
-		return principal.name.toLong()
+		return principal.name
 	}
 
 	companion object JWTConstants {
