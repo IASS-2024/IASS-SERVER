@@ -1,4 +1,4 @@
-package org.iass.user.dto
+package org.iass.user.dto.request
 
 import jakarta.validation.constraints.NotNull
 import org.iass.model.user.SocialType

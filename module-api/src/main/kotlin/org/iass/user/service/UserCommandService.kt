@@ -1,9 +1,9 @@
 package org.iass.user.service
 
 import org.iass.auth.jwt.TokenResponse
-import org.iass.user.dto.LoginRequest
-import org.iass.user.dto.LoginResponse
-import org.iass.user.dto.SignInRequest
+import org.iass.user.dto.request.LoginRequest
+import org.iass.user.dto.response.LoginResponse
+import org.iass.user.dto.request.SignInRequest
 
 interface UserCommandService {
 	fun login(authorization: String, request: LoginRequest): LoginResponse

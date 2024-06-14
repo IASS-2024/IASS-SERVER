@@ -5,9 +5,9 @@ import org.iass.auth.jwt.JwtTokenProvider
 import org.iass.auth.jwt.TokenResponse
 import org.iass.dto.response.ApiResponse
 import org.iass.dto.response.SuccessType
-import org.iass.user.dto.LoginRequest
-import org.iass.user.dto.LoginResponse
-import org.iass.user.dto.SignInRequest
+import org.iass.user.dto.request.LoginRequest
+import org.iass.user.dto.response.LoginResponse
+import org.iass.user.dto.request.SignInRequest
 import org.iass.user.facade.UserFacade
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -34,7 +34,8 @@ class UserController (
 
 	@PatchMapping("/signIn")
 	fun signIn(
-		principal: Principal, @RequestBody request: SignInRequest): ResponseEntity<ApiResponse<Nothing>> {
+		principal: Principal,
+		@Valid @RequestBody request: SignInRequest): ResponseEntity<ApiResponse<Nothing>> {
 		userFacade.signIn(jwtTokenProvider.getUserIdFromPrincipal(principal), request)
 		return ResponseEntity.ok(ApiResponse.success(SuccessType.PATCH_SIGN_IN_SUCCESS))
 	}

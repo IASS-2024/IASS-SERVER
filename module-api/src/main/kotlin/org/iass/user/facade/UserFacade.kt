@@ -1,10 +1,9 @@
 package org.iass.user.facade
 
 import org.iass.auth.jwt.TokenResponse
-import org.iass.auth.redis.RefreshToken
-import org.iass.user.dto.LoginRequest
-import org.iass.user.dto.LoginResponse
-import org.iass.user.dto.SignInRequest
+import org.iass.user.dto.request.LoginRequest
+import org.iass.user.dto.response.LoginResponse
+import org.iass.user.dto.request.SignInRequest
 import org.iass.user.service.UserCommandService
 import org.iass.user.service.UserQueryService
 import org.springframework.stereotype.Service

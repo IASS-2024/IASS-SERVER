@@ -1,22 +1,19 @@
 package org.iass.user.service
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication
 import org.iass.auth.jwt.JwtTokenProvider
 import org.iass.auth.jwt.TokenResponse
-import org.iass.auth.security.UserAuthentication
 import org.iass.dto.response.ErrorType
 import org.iass.exception.CommonException
 import org.iass.model.user.SocialType
 import org.iass.model.user.User
 import org.iass.repository.mongo.generation.GenerationRepository
 import org.iass.repository.mongo.user.UserRepository
-import org.iass.user.dto.LoginRequest
-import org.iass.user.dto.LoginResponse
-import org.iass.user.dto.SignInRequest
+import org.iass.user.dto.request.LoginRequest
+import org.iass.user.dto.response.LoginResponse
+import org.iass.user.dto.request.SignInRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
 
 @Service
