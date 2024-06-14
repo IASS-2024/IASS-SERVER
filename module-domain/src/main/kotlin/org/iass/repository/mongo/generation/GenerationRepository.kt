@@ -5,4 +5,6 @@ import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface GenerationRepository : MongoRepository<Generation, Long>
+interface GenerationRepository : MongoRepository<Generation, String>{
+	fun findGenerationByInviteCode(code: String): Generation?
+}
