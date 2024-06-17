@@ -56,7 +56,13 @@ class User(
 		this.deposit -= amount
 	}
 
-	fun signIn(nickname: String, description: String, spareTicket: Int, deposit: Int, generation: Generation) {
+	fun signIn(
+		nickname: String,
+		description: String,
+		spareTicket: Int,
+		deposit: Int,
+		generation: Generation
+	) {
 		this.nickname = nickname
 		this.description = description
 		this.spareTicket = generation.ticketCount

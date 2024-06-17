@@ -12,11 +12,14 @@ import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
 
 @Component
-
 class JwtExceptionFilter(
 	val objectMapper: ObjectMapper
 ) : OncePerRequestFilter() {
-	override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
+	override fun doFilterInternal(
+		request: HttpServletRequest,
+		response: HttpServletResponse,
+		filterChain: FilterChain
+	) {
 		response.characterEncoding = "utf-8"
 		try {
 			filterChain.doFilter(request, response)
@@ -35,7 +38,10 @@ class JwtExceptionFilter(
 		}
 	}
 
-	fun setErrorResponse(response: HttpServletResponse, errorType: ErrorType) {
+	fun setErrorResponse(
+		response: HttpServletResponse,
+		errorType: ErrorType
+	) {
 		response.status = errorType.status.value()
 		response.contentType = MediaType.APPLICATION_JSON_VALUE
 		val errorResponse = ErrorResponse(errorType.status.value(), errorType.code, errorType.message)

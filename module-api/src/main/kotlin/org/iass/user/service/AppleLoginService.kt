@@ -14,7 +14,7 @@ class AppleLoginService(
 	private val appleApiClient: AppleApiClient,
 	private val appleJwtParser: AppleJwtParser,
 	private val publicKeyGenerator: PublicKeyGenerator,
-	private val appleClaimsValidator: AppleClaimsValidator,
+	private val appleClaimsValidator: AppleClaimsValidator
 ) {
 	fun getAppleId(identityToken: String): String {
 		val headers: Map<String, String> = appleJwtParser.parseHeaders(identityToken)

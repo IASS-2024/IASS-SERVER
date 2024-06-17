@@ -16,16 +16,20 @@ class ArticleCommandServiceImpl(
 	private val userRepository: UserRepository,
 	private val articleRepository: ArticleRepository
 ) : ArticleCommandService {
-	override fun create(userId: String, request: ArticleCreateRequest): String {
+	override fun create(
+		userId: String,
+		request: ArticleCreateRequest
+	): String {
 		val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException(ErrorType.NOT_FOUND_USER)
-		return articleRepository.save(
-			Article(
-				request.url,
-				request.description,
-				request.keyword,
-				user,
-				0
-			)
-		).id!!
+		return articleRepository
+			.save(
+				Article(
+					request.url,
+					request.description,
+					request.keyword,
+					user,
+					0
+				)
+			).id!!
 	}
 }

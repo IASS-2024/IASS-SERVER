@@ -8,7 +8,11 @@ import org.springframework.stereotype.Component
 
 @Component
 class CustomAccessDeniedHandler : AccessDeniedHandler {
-	override fun handle(request: HttpServletRequest, response: HttpServletResponse, accessDeniedException: AccessDeniedException) {
+	override fun handle(
+		request: HttpServletRequest,
+		response: HttpServletResponse,
+		accessDeniedException: AccessDeniedException
+	) {
 		setResponse(response)
 	}
 

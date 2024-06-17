@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit
 import javax.crypto.SecretKey
 
 @Component
-class JwtTokenProvider (
+class JwtTokenProvider(
 	private val redisTemplate: RedisTemplate<String, String>
 ) {
 	@Value("\${jwt.secret}")
@@ -27,20 +27,22 @@ class JwtTokenProvider (
 		JWT_SECRET = Base64.getEncoder().encodeToString(JWT_SECRET.toByteArray(StandardCharsets.UTF_8))
 	}
 
-	fun reissuedToken(userId: String): TokenResponse {
-		return TokenResponse(generateAccessToken(userId),generateRefreshToken(userId))
-	}
+	fun reissuedToken(userId: String): TokenResponse =
+		TokenResponse(generateAccessToken(userId), generateRefreshToken(userId))
 
 	fun generateAccessToken(userId: String): String {
 		val now = Date()
-		val claims = Jwts.claims()
-			.setIssuedAt(now)
-			.setExpiration(Date(now.time + JWTConstants.ACCESS_TOKEN_EXPIRATION_TIME))
+		val claims =
+			Jwts
+				.claims()
+				.setIssuedAt(now)
+				.setExpiration(Date(now.time + JWTConstants.ACCESS_TOKEN_EXPIRATION_TIME))
 
 		claims[JWTConstants.USER_ID] = userId
 		claims[JWTConstants.TOKEN_TYPE] = JWTConstants.ACCESS_TOKEN
 
-		return Jwts.builder()
+		return Jwts
+			.builder()
 			.setHeaderParam(Header.TYPE, Header.JWT_TYPE)
 			.setClaims(claims)
 			.signWith(signingKey)
@@ -49,20 +51,25 @@ class JwtTokenProvider (
 
 	fun generateRefreshToken(userId: String): String {
 		val now = Date()
-		val claims = Jwts.claims()
-			.setIssuedAt(now)
-			.setExpiration(Date(now.time + JWTConstants.REFRESH_TOKEN_EXPIRATION_TIME))
+		val claims =
+			Jwts
+				.claims()
+				.setIssuedAt(now)
+				.setExpiration(Date(now.time + JWTConstants.REFRESH_TOKEN_EXPIRATION_TIME))
 
 		claims[JWTConstants.USER_ID] = userId
 		claims[JWTConstants.TOKEN_TYPE] = JWTConstants.REFRESH_TOKEN
 
-		val refreshToken = Jwts.builder()
-			.setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-			.setClaims(claims)
-			.signWith(signingKey)
-			.compact()
+		val refreshToken =
+			Jwts
+				.builder()
+				.setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+				.setClaims(claims)
+				.signWith(signingKey)
+				.compact()
 
-		redisTemplate.opsForValue()[userId.toString(), refreshToken, JWTConstants.REFRESH_TOKEN_EXPIRATION_TIME] = TimeUnit.MILLISECONDS
+		redisTemplate.opsForValue()[userId.toString(), refreshToken, JWTConstants.REFRESH_TOKEN_EXPIRATION_TIME] =
+			TimeUnit.MILLISECONDS
 		return refreshToken
 	}
 
@@ -112,13 +119,13 @@ class JwtTokenProvider (
 		}
 	}
 
-	private fun getBody(token: String?): Claims {
-		return Jwts.parserBuilder()
+	private fun getBody(token: String?): Claims =
+		Jwts
+			.parserBuilder()
 			.setSigningKey(signingKey)
 			.build()
 			.parseClaimsJws(token)
 			.body
-	}
 
 	fun getUserFromJwt(token: String?): String {
 		val claims = getBody(token)
@@ -127,7 +134,7 @@ class JwtTokenProvider (
 
 	fun getUserIdFromPrincipal(principal: Principal): String {
 		if (Objects.isNull(principal)) {
-			throw UnauthorizedException(ErrorType.INVALID_AUTH);
+			throw UnauthorizedException(ErrorType.INVALID_AUTH)
 		}
 		return principal.name
 	}

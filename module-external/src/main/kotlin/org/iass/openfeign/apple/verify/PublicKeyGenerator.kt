@@ -15,7 +15,10 @@ import java.util.*
 
 @Component
 class PublicKeyGenerator {
-	fun generatePublicKey(headers: Map<String, String>, applePublicKeys: ApplePublicKeys): PublicKey {
+	fun generatePublicKey(
+		headers: Map<String, String>,
+		applePublicKeys: ApplePublicKeys
+	): PublicKey {
 		val applePublicKey =
 			applePublicKeys.getMatchesKey(headers[SIGN_ALGORITHM_HEADER_KEY], headers[KEY_ID_HEADER_KEY])
 

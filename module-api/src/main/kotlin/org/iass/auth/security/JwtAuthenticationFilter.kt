@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse
 import org.iass.auth.config.SecurityConfig
 import org.iass.auth.jwt.JwtTokenProvider
 import org.springframework.lang.NonNull
-import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
@@ -15,14 +14,16 @@ import org.springframework.util.StringUtils
 import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
 
-
 @Component
-class JwtAuthenticationFilter (
+class JwtAuthenticationFilter(
 	private val jwtTokenProvider: JwtTokenProvider
-): OncePerRequestFilter() {
-
+) : OncePerRequestFilter() {
 	@Throws(IOException::class, ServletException::class, IOException::class)
-	override fun doFilterInternal(@NonNull request: HttpServletRequest, @NonNull response: HttpServletResponse, @NonNull filterChain: FilterChain) {
+	override fun doFilterInternal(
+		@NonNull request: HttpServletRequest,
+		@NonNull response: HttpServletResponse,
+		@NonNull filterChain: FilterChain
+	) {
 		for (whiteUrl in SecurityConfig.FILTER_WHITE_LIST) {
 			if (request.requestURI.contains(whiteUrl)) {
 				filterChain.doFilter(request, response)
@@ -46,5 +47,4 @@ class JwtAuthenticationFilter (
 		}
 		return null
 	}
-
 }

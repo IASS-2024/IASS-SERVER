@@ -9,19 +9,22 @@ import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.stereotype.Component
 
 @Component
-class IASSExceptionHandler : AccessDeniedHandler, AuthenticationEntryPoint {
-
-	override fun commence(request: HttpServletRequest?,
-						  response: HttpServletResponse?,
-						  authException: AuthenticationException?) {
+class IASSExceptionHandler :
+	AccessDeniedHandler,
+	AuthenticationEntryPoint {
+	override fun commence(
+		request: HttpServletRequest?,
+		response: HttpServletResponse?,
+		authException: AuthenticationException?
+	) {
 		log.error("Authentication Exception Occurs!")
 	}
 
-	override fun handle(request: HttpServletRequest?,
-						response: HttpServletResponse?,
-						accessDeniedException: org.springframework.security.access.AccessDeniedException?) {
+	override fun handle(
+		request: HttpServletRequest?,
+		response: HttpServletResponse?,
+		accessDeniedException: org.springframework.security.access.AccessDeniedException?
+	) {
 		log.error("Forbidden Exception Occurs!")
 	}
-
 }
-

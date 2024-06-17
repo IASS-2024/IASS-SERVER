@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.redis.core.RedisHash
 
 @RedisHash(value = "refreshToken", timeToLive = JwtTokenProvider.JWTConstants.REFRESH_TOKEN_EXPIRATION_TIME)
-data class RefreshToken (
+data class RefreshToken(
 	@Id
 	private val id: Long? = null,
 	private val refreshToken: String? = null

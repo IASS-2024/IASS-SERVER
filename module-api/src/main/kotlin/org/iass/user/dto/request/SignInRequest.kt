@@ -2,8 +2,8 @@ package org.iass.user.dto.request
 
 import jakarta.validation.constraints.NotNull
 
-data class SignInRequest (
-	//TODO - 정규식, 글자 제한 Validator 추가
+data class SignInRequest(
+	// TODO - 정규식, 글자 제한 Validator 추가
 	@field:NotNull
 	val nickname: String,
 	@field:NotNull

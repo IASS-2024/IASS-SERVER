@@ -10,12 +10,11 @@ import org.iass.model.user.User
 import org.iass.repository.mongo.generation.GenerationRepository
 import org.iass.repository.mongo.user.UserRepository
 import org.iass.user.dto.request.LoginRequest
-import org.iass.user.dto.response.LoginResponse
 import org.iass.user.dto.request.SignInRequest
+import org.iass.user.dto.response.LoginResponse
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-
 
 @Service
 @Transactional
@@ -25,33 +24,46 @@ class UserCommandServiceImpl(
 	private val jwtTokenProvider: JwtTokenProvider,
 	private val appleLoginService: AppleLoginService
 ) : UserCommandService {
-	override fun login(authorization: String, request: LoginRequest) : LoginResponse {
+	override fun login(
+		authorization: String,
+		request: LoginRequest
+	): LoginResponse {
 		val socialId = appleLoginService.getAppleId(authorization)
 		val findUser = userRepository.findUserBySocialId(socialId)
-		val user = findUser?.apply {
-			resetSocialType(request.socialType)
-		} ?: User(
-			socialId = socialId,
-			socialType = request.socialType
-		).also {
-			userRepository.save(it)
-		}
-		val token = user.id?.let {
-			TokenResponse(
-				jwtTokenProvider.generateAccessToken(it),
-				jwtTokenProvider.generateRefreshToken(it)
-			) } ?: throw NotFoundException(ErrorType.NOT_FOUND_USER)
+		val user =
+			findUser?.apply {
+				resetSocialType(request.socialType)
+			} ?: User(
+				socialId = socialId,
+				socialType = request.socialType
+			).also {
+				userRepository.save(it)
+			}
+		val token =
+			user.id?.let {
+				TokenResponse(
+					jwtTokenProvider.generateAccessToken(it),
+					jwtTokenProvider.generateRefreshToken(it)
+				)
+			} ?: throw NotFoundException(ErrorType.NOT_FOUND_USER)
 		return LoginResponse(user.id, token)
 	}
 
-	override fun signIn(userId: String, request: SignInRequest) {
+	override fun signIn(
+		userId: String,
+		request: SignInRequest
+	) {
 		val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException(ErrorType.NOT_FOUND_USER)
-		val generation = generationRepository.findGenerationByInviteCode(request.code) ?: throw NotFoundException(ErrorType.NOT_FOUND_GENERATION)
-		user.signIn(request.nickname,
-					request.description,
-					generation.ticketCount,
-					generation.deposit,
-					generation)
+		val generation =
+			generationRepository.findGenerationByInviteCode(request.code)
+				?: throw NotFoundException(ErrorType.NOT_FOUND_GENERATION)
+		user.signIn(
+			request.nickname,
+			request.description,
+			generation.ticketCount,
+			generation.deposit,
+			generation
+		)
 		userRepository.save(user)
 	}
 
@@ -76,8 +88,5 @@ class UserCommandServiceImpl(
 		} else {
 			throw CommonException(ErrorType.BAD_REQUEST)
 		}
-
 	}
-
 }
-

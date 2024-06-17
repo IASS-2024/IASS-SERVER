@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.*
 import org.iass.dto.response.ErrorType
 import org.iass.exception.BadRequestException
-import org.iass.exception.CommonException
 import org.springframework.stereotype.Component
 import java.security.PublicKey
 
@@ -16,7 +15,12 @@ class AppleJwtParser(
 	fun parseHeaders(identityToken: String): Map<String, String> {
 		try {
 			val encodedHeader = identityToken.split(".")[HEADER_INDEX]
-			val decodedHeader = String(java.util.Base64.getUrlDecoder().decode(encodedHeader))
+			val decodedHeader =
+				String(
+					java.util.Base64
+						.getUrlDecoder()
+						.decode(encodedHeader)
+				)
 			val typeRef = object : com.fasterxml.jackson.core.type.TypeReference<Map<String, String>>() {}
 			return OBJECT_MAPPER.readValue(decodedHeader, typeRef)
 		} catch (e: JsonProcessingException) {
@@ -28,9 +32,13 @@ class AppleJwtParser(
 		}
 	}
 
-	fun parsePublicKeyAndGetClaims(idToken: String?, publicKey: PublicKey?): Claims {
+	fun parsePublicKeyAndGetClaims(
+		idToken: String?,
+		publicKey: PublicKey?
+	): Claims {
 		try {
-			return Jwts.parserBuilder()
+			return Jwts
+				.parserBuilder()
 				.setSigningKey(publicKey)
 				.build()
 				.parseClaimsJws(idToken)

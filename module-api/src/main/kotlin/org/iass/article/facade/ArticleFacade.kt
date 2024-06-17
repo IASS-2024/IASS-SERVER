@@ -10,7 +10,8 @@ import org.springframework.transaction.annotation.Transactional
 class ArticleFacade(
 	private val articleCommandService: ArticleCommandService
 ) {
-	fun create(userId: String, request: ArticleCreateRequest): String {
-		return articleCommandService.create(userId, request)
-	}
+	fun create(
+		userId: String,
+		request: ArticleCreateRequest
+	): String = articleCommandService.create(userId, request)
 }
