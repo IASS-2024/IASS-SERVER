@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.config.web.server.ServerHttpSecurity.http
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
@@ -16,25 +17,32 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity(debug = true)
-class SecurityConfig (
+class SecurityConfig(
 	private val jwtAuthenticationFilter: JwtAuthenticationFilter,
 	private val iassExceptionHandler: IASSExceptionHandler,
 	private val jwtExceptionFilter: JwtExceptionFilter
-){
+) {
 	@Bean
 	fun filterChain(http: HttpSecurity): SecurityFilterChain {
-		http.csrf().disable()
-			.formLogin().disable()
-			.httpBasic().disable()
-
-			.sessionManagement { sessionManagementConfigurer -> sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-			.exceptionHandling { exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(iassExceptionHandler) }
-			.exceptionHandling { exceptionHandlingConfigurer -> exceptionHandlingConfigurer.accessDeniedHandler(iassExceptionHandler) }
-
-			.authorizeHttpRequests { authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry.requestMatchers(*SECURITY_WHITE_LIST.toTypedArray()).permitAll() }
-			.authorizeHttpRequests { authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry.anyRequest().authenticated() }
-			.authorizeHttpRequests { authorizationManagerRequestMatcherRegistry -> http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java) }
-			.authorizeHttpRequests { authorizationManagerRequestMatcherRegistry -> http.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter::class.java) }
+		http
+			.csrf { csrfConfigurer -> csrfConfigurer.disable() }
+			.formLogin { formLoginConfigurer -> formLoginConfigurer.disable() }
+			.httpBasic { httpBasicConfigurer -> httpBasicConfigurer.disable() }
+			.sessionManagement { sessionManagementConfigurer ->
+				sessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			}.exceptionHandling { exceptionHandlingConfigurer ->
+				exceptionHandlingConfigurer.authenticationEntryPoint(iassExceptionHandler)
+			}.exceptionHandling { exceptionHandlingConfigurer ->
+				exceptionHandlingConfigurer.accessDeniedHandler(iassExceptionHandler)
+			}.authorizeHttpRequests { authorizationManagerRequestMatcherRegistry ->
+				authorizationManagerRequestMatcherRegistry.requestMatchers(*SECURITY_WHITE_LIST.toTypedArray()).permitAll()
+			}.authorizeHttpRequests { authorizationManagerRequestMatcherRegistry ->
+				authorizationManagerRequestMatcherRegistry.anyRequest().authenticated()
+			}.authorizeHttpRequests { authorizationManagerRequestMatcherRegistry ->
+				http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+			}.authorizeHttpRequests { authorizationManagerRequestMatcherRegistry ->
+				http.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter::class.java)
+			}
 
 		return http.build()
 	}
@@ -55,22 +63,23 @@ class SecurityConfig (
 	}
 
 	companion object WhiteListConstants {
-		val FILTER_WHITE_LIST = listOf(
-			"/auth/keys",
-			"/auth",
-			"/user/login",
-			"/login",
-			"/actuator/health",
-			"/error"
-		)
-		val SECURITY_WHITE_LIST = listOf(
-			"/login/**",
-			"/",
-			"/actuator/health",
-			"/user/**",
-			"/error",
-			"/webjars/**"
-		)
+		val FILTER_WHITE_LIST =
+			listOf(
+				"/auth/keys",
+				"/auth",
+				"/user/login",
+				"/login",
+				"/actuator/health",
+				"/error"
+			)
+		val SECURITY_WHITE_LIST =
+			listOf(
+				"/login/**",
+				"/",
+				"/actuator/health",
+				"/user/**",
+				"/error",
+				"/webjars/**"
+			)
 	}
 }
-
