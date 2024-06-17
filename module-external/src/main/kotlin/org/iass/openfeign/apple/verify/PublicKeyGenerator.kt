@@ -2,7 +2,6 @@ package org.iass.openfeign.apple.verify
 
 import org.iass.dto.response.ErrorType
 import org.iass.exception.BadRequestException
-import org.iass.exception.CommonException
 import org.iass.openfeign.dto.ApplePublicKey
 import org.iass.openfeign.dto.ApplePublicKeys
 import org.springframework.stereotype.Component
@@ -17,7 +16,7 @@ import java.util.*
 @Component
 class PublicKeyGenerator {
 	fun generatePublicKey(headers: Map<String, String>, applePublicKeys: ApplePublicKeys): PublicKey {
-		val applePublicKey: ApplePublicKey =
+		val applePublicKey =
 			applePublicKeys.getMatchesKey(headers[SIGN_ALGORITHM_HEADER_KEY], headers[KEY_ID_HEADER_KEY])
 
 		return generatePublicKeyWithApplePublicKey(applePublicKey)
@@ -27,8 +26,8 @@ class PublicKeyGenerator {
 		val nBytes = Base64.getUrlDecoder().decode(publicKey.n)
 		val eBytes = Base64.getUrlDecoder().decode(publicKey.e)
 
-		val n: BigInteger = BigInteger(POSITIVE_SIGN_NUMBER, nBytes)
-		val e: BigInteger = BigInteger(POSITIVE_SIGN_NUMBER, eBytes)
+		val n = BigInteger(POSITIVE_SIGN_NUMBER, nBytes)
+		val e = BigInteger(POSITIVE_SIGN_NUMBER, eBytes)
 
 		val publicKeySpec = RSAPublicKeySpec(n, e)
 

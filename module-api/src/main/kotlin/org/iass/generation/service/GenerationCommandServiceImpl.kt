@@ -19,7 +19,8 @@ class GenerationCommandServiceImpl(
 	private val generationRepository: GenerationRepository
 ) : GenerationCommandService {
 	override fun create(userId: String, request: GenerationCreateRequest): Generation {
-		userRepository.findByIdOrNull(userId) ?: throw NotFoundException()
+		//TODO - admin만 가능하도록 변경 필요
+		userRepository.findByIdOrNull(userId) ?: throw NotFoundException(ErrorType.NOT_FOUND_USER)
 		Generation(
 			order = request.order,
 			startAt = request.startAt,

@@ -1,11 +1,10 @@
 package org.iass.auth.jwt
 
-data class TokenResponse(val accessToken: String,
-						 val refreshToken: String
+data class TokenResponse(var accessToken: String,
+						 var refreshToken: String
 ) {
-	companion object {
-		fun of(accessToken: String, refreshToken: String): TokenResponse {
-			return TokenResponse("Bearer $accessToken", "Bearer $refreshToken")
-		}
+	init{
+		this.accessToken = "Bearer $accessToken"
+		this.refreshToken = "Bearer $refreshToken"
 	}
 }

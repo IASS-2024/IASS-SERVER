@@ -7,6 +7,4 @@ class UserAuthentication(
 	principal: Any?,
 	credentials: Any?,
 	authorities: Collection<GrantedAuthority?>?
-): UsernamePasswordAuthenticationToken(principal, credentials, authorities) {
-
-}
+): UsernamePasswordAuthenticationToken(principal, credentials, authorities)

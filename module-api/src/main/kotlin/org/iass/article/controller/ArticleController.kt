@@ -6,6 +6,7 @@ import org.iass.article.facade.ArticleFacade
 import org.iass.auth.jwt.JwtTokenProvider
 import org.iass.dto.response.ApiResponse
 import org.iass.dto.response.SuccessType
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -27,6 +28,6 @@ class ArticleController(
 		@Valid @RequestBody request: ArticleCreateRequest
 	): ResponseEntity<ApiResponse<Nothing>> {
 		articleFacade.create(jwtTokenProvider.getUserIdFromPrincipal(principal), request)
-		return ResponseEntity.ok(ApiResponse.success(SuccessType.POST_ARTICLE_SUCCESS))
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(SuccessType.POST_ARTICLE_SUCCESS))
 	}
 }

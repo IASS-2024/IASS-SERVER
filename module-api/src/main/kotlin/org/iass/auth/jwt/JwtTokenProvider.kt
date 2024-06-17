@@ -28,12 +28,10 @@ class JwtTokenProvider (
 	}
 
 	fun reissuedToken(userId: String): TokenResponse {
-		return TokenResponse.of(
-			generateAccessToken(userId),
-			generateRefreshToken(userId))
+		return TokenResponse(generateAccessToken(userId),generateRefreshToken(userId))
 	}
 
-	fun generateAccessToken(userId: String?): String {
+	fun generateAccessToken(userId: String): String {
 		val now = Date()
 		val claims = Jwts.claims()
 			.setIssuedAt(now)
@@ -49,7 +47,7 @@ class JwtTokenProvider (
 			.compact()
 	}
 
-	fun generateRefreshToken(userId: String?): String {
+	fun generateRefreshToken(userId: String): String {
 		val now = Date()
 		val claims = Jwts.claims()
 			.setIssuedAt(now)
@@ -135,12 +133,12 @@ class JwtTokenProvider (
 	}
 
 	companion object JWTConstants {
-		const val USER_ID: String = "userId"
-		const val TOKEN_TYPE: String = "type"
-		const val ACCESS_TOKEN: String = "access"
-		const val REFRESH_TOKEN: String = "refresh"
-		const val ACCESS_TOKEN_EXPIRATION_TIME: Long = 60 * 1000L * 60 * 24 * 7 * 2 // TODO - 만료시간 변경
-		const val REFRESH_TOKEN_EXPIRATION_TIME: Long = 60 * 1000L * 60 * 24 * 7 * 2
+		const val USER_ID = "userId"
+		const val TOKEN_TYPE = "type"
+		const val ACCESS_TOKEN = "access"
+		const val REFRESH_TOKEN = "refresh"
+		const val ACCESS_TOKEN_EXPIRATION_TIME = 60 * 1000L * 60 * 24 * 7 * 2 // TODO - 만료시간 변경
+		const val REFRESH_TOKEN_EXPIRATION_TIME = 60 * 1000L * 60 * 24 * 7 * 2
 	}
 
 	enum class JwtValidationType {

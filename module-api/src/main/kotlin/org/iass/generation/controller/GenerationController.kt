@@ -6,6 +6,7 @@ import org.iass.dto.response.ApiResponse
 import org.iass.dto.response.SuccessType
 import org.iass.generation.dto.request.GenerationCreateRequest
 import org.iass.generation.facade.GenerationFacade
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -25,6 +26,6 @@ class GenerationController(
 		@Valid @RequestBody request: GenerationCreateRequest
 	): ResponseEntity<ApiResponse<Nothing>> {
 		generationFacade.create(jwtTokenProvider.getUserIdFromPrincipal(principal), request)
-		return ResponseEntity.ok(ApiResponse.success(SuccessType.POST_GENERATION_SUCCESS))
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(SuccessType.POST_GENERATION_SUCCESS))
 	}
 }

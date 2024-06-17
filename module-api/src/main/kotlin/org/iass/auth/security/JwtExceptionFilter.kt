@@ -1,12 +1,9 @@
 package org.iass.auth.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.iass.dto.response.ApiResponse
 import org.iass.dto.response.ErrorType
 import org.iass.exception.CommonException
 import org.springframework.http.MediaType
@@ -50,8 +47,8 @@ class JwtExceptionFilter(
 	}
 
 	data class ErrorResponse(
-		val status: Int? = null,
-		val code: Int  = 0,
-		val message: String? = null
+		val status: Int,
+		val code: Int,
+		val message: String
 	)
 }

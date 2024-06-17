@@ -4,6 +4,7 @@ import org.iass.auth.jwt.JwtTokenProvider
 import org.iass.auth.jwt.TokenResponse
 import org.iass.dto.response.ErrorType
 import org.iass.exception.CommonException
+import org.iass.exception.NotFoundException
 import org.iass.model.user.SocialType
 import org.iass.model.user.User
 import org.iass.repository.mongo.generation.GenerationRepository
@@ -34,13 +35,17 @@ class UserCommandServiceImpl(
 			socialType = request.socialType
 		)
 		userRepository.save(user)
-		val token = TokenResponse(jwtTokenProvider.generateAccessToken(user.id), jwtTokenProvider.generateRefreshToken(user.id))
-		return LoginResponse.of(user.id, token)
+		val token = user.id?.let {
+			TokenResponse(
+				jwtTokenProvider.generateAccessToken(it),
+				jwtTokenProvider.generateRefreshToken(it)
+			) } ?: throw NotFoundException(ErrorType.NOT_FOUND_USER)
+		return LoginResponse(user.id, token)
 	}
 
 	override fun signIn(userId: String, request: SignInRequest) {
-		val user = userRepository.findByIdOrNull(userId) ?: throw CommonException(ErrorType.NOT_FOUND)
-		val generation = generationRepository.findGenerationByInviteCode(request.code) ?: throw CommonException(ErrorType.NOT_FOUND) // TODO - 예외 발생
+		val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException(ErrorType.NOT_FOUND_USER)
+		val generation = generationRepository.findGenerationByInviteCode(request.code) ?: throw NotFoundException(ErrorType.NOT_FOUND_GENERATION)
 		user.signIn(request.nickname,
 					request.description,
 					generation.ticketCount,
@@ -57,12 +62,12 @@ class UserCommandServiceImpl(
 	}
 
 	override fun logout(userId: String) {
-		userRepository.findByIdOrNull(userId) ?: throw CommonException(ErrorType.NOT_FOUND)
+		userRepository.findByIdOrNull(userId) ?: throw NotFoundException(ErrorType.NOT_FOUND_USER)
 		jwtTokenProvider.deleteRefreshToken(userId)
 	}
 
 	override fun withdrawal(userId: String) {
-		val user = userRepository.findByIdOrNull(userId) ?: throw CommonException(ErrorType.NOT_FOUND)
+		val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException(ErrorType.NOT_FOUND_USER)
 		jwtTokenProvider.deleteRefreshToken(userId)
 		if (user.socialType != SocialType.WITHDRAWAL) {
 			user.withdrawal()

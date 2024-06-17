@@ -5,7 +5,6 @@ import org.springframework.boot.runApplication
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 
 @SpringBootApplication(scanBasePackageClasses = [CommonRoot::class, DomainRoot::class, ExternalRoot::class])
-@EnableWebSecurity(debug = true)
 class IassApplication
 
 fun main(args: Array<String>) {

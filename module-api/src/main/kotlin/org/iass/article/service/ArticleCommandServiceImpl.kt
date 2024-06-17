@@ -1,6 +1,7 @@
 package org.iass.article.service
 
 import org.iass.article.dto.request.ArticleCreateRequest
+import org.iass.dto.response.ErrorType
 import org.iass.exception.NotFoundException
 import org.iass.model.article.Article
 import org.iass.repository.mongo.article.ArticleRepository
@@ -16,7 +17,7 @@ class ArticleCommandServiceImpl(
 	private val articleRepository: ArticleRepository
 ) : ArticleCommandService {
 	override fun create(userId: String, request: ArticleCreateRequest): String {
-		val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException()
+		val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException(ErrorType.NOT_FOUND_USER)
 		return articleRepository.save(
 			Article(
 				request.url,
