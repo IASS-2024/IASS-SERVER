@@ -24,12 +24,12 @@ enum class ErrorType(val status: HttpStatus, val code: Int, val message: String)
 	 * 401 UNAUTHORIZED (4100 ~ 4199)
 	 */
 	UNAUTHORIZED(HttpStatus.UNAUTHORIZED, 4100, "인증되지 않았습니다"),
-	UNKNOWN_TOKEN(HttpStatus.UNAUTHORIZED, 4100, "인증 토큰이 존재하지 않습니다."),
-    UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED, 4101, "지원하지 않는 토큰 방식입니다."),
-    INVALID_AUTH(HttpStatus.UNAUTHORIZED, 4102, "인증되지 않은 사용자입니다."),
-    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, 4103, "만료된 Token입니다."),
-    WRONG_TYPE_TOKEN(HttpStatus.UNAUTHORIZED, 4104, "잘못된 형식의 Token입니다"),
-    WRONG_SIGNATURE_TOKEN(HttpStatus.UNAUTHORIZED, 4105, "Signature가 잘못된 Token입니다."),
+	UNKNOWN_TOKEN(HttpStatus.UNAUTHORIZED, 4101, "인증 토큰이 존재하지 않습니다."),
+    UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED, 4102, "지원하지 않는 토큰 방식입니다."),
+    INVALID_AUTH(HttpStatus.UNAUTHORIZED, 4103, "인증되지 않은 사용자입니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, 4104, "만료된 Token입니다."),
+    WRONG_TYPE_TOKEN(HttpStatus.UNAUTHORIZED, 4105, "잘못된 형식의 Token입니다"),
+    WRONG_SIGNATURE_TOKEN(HttpStatus.UNAUTHORIZED, 4106, "Signature가 잘못된 Token입니다."),
 
 	/**
 	 * 403 FORBIDDEN (4300 ~ 4399)
