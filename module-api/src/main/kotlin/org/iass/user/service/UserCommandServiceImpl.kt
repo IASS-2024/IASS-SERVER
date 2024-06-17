@@ -33,8 +33,9 @@ class UserCommandServiceImpl(
 		} ?: User(
 			socialId = socialId,
 			socialType = request.socialType
-		)
-		userRepository.save(user)
+		).also {
+			userRepository.save(it)
+		}
 		val token = user.id?.let {
 			TokenResponse(
 				jwtTokenProvider.generateAccessToken(it),
