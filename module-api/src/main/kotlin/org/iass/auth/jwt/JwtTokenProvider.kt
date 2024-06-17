@@ -8,7 +8,6 @@ import org.iass.dto.response.ErrorType
 import org.iass.exception.UnauthorizedException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.security.Principal

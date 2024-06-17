@@ -1,9 +1,12 @@
 package org.iass.auth.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.iass.dto.response.ApiResponse
 import org.iass.dto.response.ErrorType
 import org.iass.exception.CommonException
 import org.springframework.http.MediaType
@@ -12,23 +15,24 @@ import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
 
 @Component
+
 class JwtExceptionFilter(
-	private val objectMapper: ObjectMapper
+	val objectMapper: ObjectMapper
 ) : OncePerRequestFilter() {
 	override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
 		response.characterEncoding = "utf-8"
 		try {
 			filterChain.doFilter(request, response)
 		} catch (e: CommonException) {
-			if (e.getHttpStatus().equals(ErrorType.UNKNOWN_TOKEN)) {
+			if (e.errorType == ErrorType.UNKNOWN_TOKEN) {
 				setErrorResponse(response, ErrorType.UNKNOWN_TOKEN)
-			} else if (e.getHttpStatus().equals(ErrorType.WRONG_TYPE_TOKEN)) {
+			} else if (e.errorType == ErrorType.WRONG_TYPE_TOKEN) {
 				setErrorResponse(response, ErrorType.WRONG_TYPE_TOKEN)
-			} else if (e.getHttpStatus().equals(ErrorType.EXPIRED_TOKEN)) {
+			} else if (e.errorType == ErrorType.EXPIRED_TOKEN) {
 				setErrorResponse(response, ErrorType.EXPIRED_TOKEN)
-			} else if (e.getHttpStatus().equals(ErrorType.UNSUPPORTED_TOKEN)) {
+			} else if (e.errorType == ErrorType.UNSUPPORTED_TOKEN) {
 				setErrorResponse(response, ErrorType.UNSUPPORTED_TOKEN)
-			} else if (e.getHttpStatus().equals(ErrorType.WRONG_SIGNATURE_TOKEN)) {
+			} else if (e.errorType == ErrorType.WRONG_SIGNATURE_TOKEN) {
 				setErrorResponse(response, ErrorType.WRONG_SIGNATURE_TOKEN)
 			}
 		}
@@ -46,9 +50,8 @@ class JwtExceptionFilter(
 	}
 
 	data class ErrorResponse(
-		private val status: Int? = null,
-		private val code: Int  = 0,
-		private val message: String? = null
-	){
-	}
+		val status: Int? = null,
+		val code: Int  = 0,
+		val message: String? = null
+	)
 }
